@@ -1,0 +1,10 @@
+requests==2.31.0
+flask==2.3.3
+flask-sqlalchemy==3.0.5
+flask-login==0.6.3
+beautifulsoup4==4.12.2
+selenium==4.15.0
+python-dotenv==1.0.0
+schedule==1.2.0
+pandas==2.1.1
+numpy==1.25.2

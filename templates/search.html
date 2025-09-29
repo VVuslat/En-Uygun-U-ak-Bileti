@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2>Uçuş Arama</h2>
+
+<div class="card">
+    <div class="card-body">
+        <form method="POST">
+            <div class="row mb-3">
+                <div class="col-md-3">
+                    <label for="departure" class="form-label">Nereden</label>
+                    <select class="form-select" id="departure" name="departure" required>
+                        <option value="">Şehir seçiniz</option>
+                        <option value="İstanbul">İstanbul</option>
+                        <option value="Ankara">Ankara</option>
+                        <option value="İzmir">İzmir</option>
+                        <option value="Antalya">Antalya</option>
+                        <option value="Adana">Adana</option>
+                        <option value="Trabzon">Trabzon</option>
+                        <option value="Gaziantep">Gaziantep</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="destination" class="form-label">Nereye</label>
+                    <select class="form-select" id="destination" name="destination" required>
+                        <option value="">Şehir seçiniz</option>
+                        <option value="İstanbul">İstanbul</option>
+                        <option value="Ankara">Ankara</option>
+                        <option value="İzmir">İzmir</option>
+                        <option value="Antalya">Antalya</option>
+                        <option value="Adana">Adana</option>
+                        <option value="Trabzon">Trabzon</option>
+                        <option value="Gaziantep">Gaziantep</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="date" class="form-label">Tarih</label>
+                    <input type="date" class="form-control" id="date" name="date" required>
+                </div>
+                <div class="col-md-3">
+                    <label class="form-label">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary d-block w-100">🔍 Ara</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="mt-4">
+    <h4>Popüler Rotalar</h4>
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="card-title">İstanbul → Ankara</h6>
+                    <p class="card-text">Ortalama fiyat: <strong>350 TL</strong></p>
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="setRoute('İstanbul', 'Ankara')">Seç</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="card-title">İstanbul → İzmir</h6>
+                    <p class="card-text">Ortalama fiyat: <strong>280 TL</strong></p>
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="setRoute('İstanbul', 'İzmir')">Seç</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="card-title">İstanbul → Antalya</h6>
+                    <p class="card-text">Ortalama fiyat: <strong>420 TL</strong></p>
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="setRoute('İstanbul', 'Antalya')">Seç</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <h6 class="card-title">Ankara → İzmir</h6>
+                    <p class="card-text">Ortalama fiyat: <strong>320 TL</strong></p>
+                    <a href="#" class="btn btn-sm btn-outline-primary" onclick="setRoute('Ankara', 'İzmir')">Seç</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Set minimum date to today
+document.getElementById('date').min = new Date().toISOString().split('T')[0];
+
+function setRoute(departure, destination) {
+    document.getElementById('departure').value = departure;
+    document.getElementById('destination').value = destination;
+}
+</script>
+{% endblock %}
