@@ -1,0 +1,84 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto text-center">
+        <h1 class="display-4 mb-4">En Uygun Uçak Biletini Bulun</h1>
+        <p class="lead mb-4">Türkiye'nin en kapsamlı uçak bileti karşılaştırma platformu ile en uygun fiyatları keşfedin.</p>
+        
+        <div class="card">
+            <div class="card-body">
+                <form action="{{ url_for('search_flights') }}" method="POST">
+                    <div class="row mb-3">
+                        <div class="col-md-4">
+                            <label for="departure" class="form-label">Nereden</label>
+                            <select class="form-select" id="departure" name="departure" required>
+                                <option value="">Şehir seçiniz</option>
+                                <option value="İstanbul">İstanbul</option>
+                                <option value="Ankara">Ankara</option>
+                                <option value="İzmir">İzmir</option>
+                                <option value="Antalya">Antalya</option>
+                                <option value="Adana">Adana</option>
+                                <option value="Trabzon">Trabzon</option>
+                                <option value="Gaziantep">Gaziantep</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="destination" class="form-label">Nereye</label>
+                            <select class="form-select" id="destination" name="destination" required>
+                                <option value="">Şehir seçiniz</option>
+                                <option value="İstanbul">İstanbul</option>
+                                <option value="Ankara">Ankara</option>
+                                <option value="İzmir">İzmir</option>
+                                <option value="Antalya">Antalya</option>
+                                <option value="Adana">Adana</option>
+                                <option value="Trabzon">Trabzon</option>
+                                <option value="Gaziantep">Gaziantep</option>
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="date" class="form-label">Tarih</label>
+                            <input type="date" class="form-control" id="date" name="date" required>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-lg">🔍 Uçuş Ara</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-5">
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">💰 En İyi Fiyatlar</h5>
+                <p class="card-text">Tüm havayollarından en uygun fiyatları karşılaştırarak size en iyi seçenekleri sunuyoruz.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">⚡ Hızlı Arama</h5>
+                <p class="card-text">Gelişmiş algoritmasıyla saniyeler içinde binlerce uçuş seçeneğini tarayıp en uygununu bulur.</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <h5 class="card-title">🔔 Fiyat Uyarıları</h5>
+                <p class="card-text">İstediğiniz rotada fiyat düşüşlerini takip edin ve anında bildirim alın.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Set minimum date to today
+document.getElementById('date').min = new Date().toISOString().split('T')[0];
+</script>
+{% endblock %}
