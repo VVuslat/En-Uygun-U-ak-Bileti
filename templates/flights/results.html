@@ -1,0 +1,206 @@
+{% extends "base.html" %}
+
+{% block title %}Uçuş Sonuçları - En Uygun Uçak Bileti{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3>
+                <i class="fas fa-plane"></i> 
+                {{ search.origin }} → {{ search.destination }} Uçuşları
+            </h3>
+            <div>
+                <small class="text-muted">
+                    {{ search.departure_date.strftime('%d.%m.%Y') }}
+                    {% if search.return_date %}
+                        - {{ search.return_date.strftime('%d.%m.%Y') }}
+                    {% endif %}
+                    • {{ search.passenger_count }} yolcu
+                </small>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h6><i class="fas fa-filter"></i> Filtreler</h6>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <label class="form-label">Sıralama</label>
+                    <select class="form-select" id="sortSelect" onchange="sortFlights(this.value)">
+                        <option value="price">En Ucuz</option>
+                        <option value="duration">En Kısa</option>
+                        <option value="departure">En Erken</option>
+                    </select>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Maksimum Fiyat</label>
+                    <input type="range" class="form-range" id="priceRange" min="0" max="5000" value="5000">
+                    <div class="d-flex justify-content-between">
+                        <small>0 TL</small>
+                        <small id="priceValue">5000 TL</small>
+                    </div>
+                </div>
+                
+                <div class="mb-3">
+                    <label class="form-label">Havayolu</label>
+                    <select class="form-select" id="airlineFilter">
+                        <option value="all">Tümü</option>
+                        <option value="turkish">Turkish Airlines</option>
+                        <option value="pegasus">Pegasus Airlines</option>
+                        <option value="sunexpress">SunExpress</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-9">
+        <div class="flights-container">
+            {% if flights %}
+                {% for flight in flights %}
+                <div class="card flight-card mb-3" 
+                     data-price="{{ flight.price }}" 
+                     data-airline="{{ flight.airline }}"
+                     data-departure-time="{{ flight.departure_time }}">
+                    <div class="card-body">
+                        <div class="row align-items-center">
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <strong>{{ flight.flight_number }}</strong>
+                                    <div class="small text-muted">{{ flight.airline }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h5 class="mb-0">{{ flight.departure_time.split(' ')[1] if ' ' in flight.departure_time else flight.departure_time }}</h5>
+                                    <div class="text-muted">{{ flight.origin }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <i class="fas fa-plane text-primary"></i>
+                                    <div class="small text-muted">{{ flight.duration if flight.duration else '2h 30m' }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-3">
+                                <div class="text-center">
+                                    <h5 class="mb-0">{{ flight.arrival_time.split(' ')[1] if ' ' in flight.arrival_time else flight.arrival_time }}</h5>
+                                    <div class="text-muted">{{ flight.destination }}</div>
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-2">
+                                <div class="text-center">
+                                    <div class="flight-price">{{ "%.2f"|format(flight.price) }} TL</div>
+                                    {% if flight.booking_url %}
+                                        <a href="{{ flight.booking_url }}" 
+                                           target="_blank" 
+                                           class="btn btn-primary btn-sm mt-2">
+                                            <i class="fas fa-external-link-alt"></i> Rezervasyon
+                                        </a>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <hr class="my-2">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <small class="text-muted">
+                                    <i class="fas fa-info-circle"></i>
+                                    {% if flight.available_seats %}
+                                        {{ flight.available_seats }} koltuk mevcut
+                                    {% else %}
+                                        Koltuk bilgisi mevcut değil
+                                    {% endif %}
+                                </small>
+                            </div>
+                            <div class="col-md-6 text-end">
+                                <small class="text-muted">
+                                    {% if flight.aircraft_type %}
+                                        {{ flight.aircraft_type }}
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            {% else %}
+                <div class="card">
+                    <div class="card-body text-center py-5">
+                        <i class="fas fa-search fa-3x text-muted mb-3"></i>
+                        <h5 class="text-muted">Belirtilen kriterlere uygun uçuş bulunamadı</h5>
+                        <p class="text-muted">Lütfen arama kriterlerinizi değiştirip tekrar deneyin.</p>
+                        <a href="{{ url_for('flights.search') }}" class="btn btn-primary">
+                            <i class="fas fa-arrow-left"></i> Yeni Arama
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+function sortFlights(criteria) {
+    var container = document.querySelector('.flights-container');
+    var flights = Array.from(container.querySelectorAll('.flight-card'));
+    
+    flights.sort(function(a, b) {
+        switch(criteria) {
+            case 'price':
+                return parseFloat(a.dataset.price) - parseFloat(b.dataset.price);
+            case 'duration':
+                // Simple duration comparison - in real app would parse duration properly
+                return 0;
+            case 'departure':
+                return a.dataset.departureTime.localeCompare(b.dataset.departureTime);
+            default:
+                return 0;
+        }
+    });
+    
+    flights.forEach(function(flight) {
+        container.appendChild(flight);
+    });
+}
+
+// Price range filter
+document.getElementById('priceRange').addEventListener('input', function() {
+    var maxPrice = this.value;
+    document.getElementById('priceValue').textContent = maxPrice + ' TL';
+    
+    var flights = document.querySelectorAll('.flight-card');
+    flights.forEach(function(flight) {
+        var price = parseFloat(flight.dataset.price);
+        flight.style.display = price <= maxPrice ? 'block' : 'none';
+    });
+});
+
+// Airline filter
+document.getElementById('airlineFilter').addEventListener('change', function() {
+    var selectedAirline = this.value;
+    var flights = document.querySelectorAll('.flight-card');
+    
+    flights.forEach(function(flight) {
+        var airline = flight.dataset.airline.toLowerCase();
+        var shouldShow = selectedAirline === 'all' || airline.includes(selectedAirline);
+        flight.style.display = shouldShow ? 'block' : 'none';
+    });
+});
+</script>
+{% endblock %}
