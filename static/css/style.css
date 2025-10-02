@@ -26,6 +26,7 @@ body {
     box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15);
 }
 
+
 .card-header {
     background-color: #ffffff;
     border-bottom: 1px solid #dee2e6;
@@ -140,6 +141,13 @@ footer {
     }
     
 
+
+    .btn-lg {
+        padding: 0.65rem 1.25rem;
+        font-size: 1rem;
+    }
+}
+
 .fade-in {
     animation: fadeIn 0.5s ease-in-out;
 }
@@ -173,7 +181,8 @@ footer {
 .price-expensive {
     color: #dc3545;
     font-weight: bold;
-=======
+  
+  
 @keyframes fadeIn {
     from {
         opacity: 0;

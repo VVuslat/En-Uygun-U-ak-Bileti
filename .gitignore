@@ -62,6 +62,14 @@ ehthumbs.db
 Thumbs.db
 
 # Temporary files
+tmp/
+temp/
+.tmp/
+
+# Node modules (if using npm for frontend assets)
+node_modules/
+
+# Temporary files
 *.tmp
 *.temp
 .tmp/
