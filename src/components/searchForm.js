@@ -173,8 +173,10 @@ export function attachSearchFormHandlers(onSubmitCallback) {
             .join('');
         errorContainer.classList.remove('hidden');
         
-        // Scroll to errors for accessibility
-        errorContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        // Scroll to errors for accessibility (check if scrollIntoView exists - for testing compatibility)
+        if (errorContainer.scrollIntoView) {
+            errorContainer.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
     }
     
     /**

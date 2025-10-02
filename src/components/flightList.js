@@ -177,7 +177,7 @@ function updateResultsCount(count) {
  */
 function scrollToResults() {
     const resultsSection = document.getElementById('results-section');
-    if (resultsSection) {
+    if (resultsSection && resultsSection.scrollIntoView) {
         setTimeout(() => {
             resultsSection.scrollIntoView({ 
                 behavior: 'smooth', 
