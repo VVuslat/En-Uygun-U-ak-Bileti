@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+
+{% block title %}Kontrol Paneli - En Uygun Uçak Bileti{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-12">
+        <h2>Hoş Geldiniz, {{ current_user.get_full_name() }}!</h2>
+        <hr>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-3 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-search fa-2x text-primary mb-2"></i>
+                <h5 class="card-title">Uçuş Ara</h5>
+                <p class="card-text">Yeni uçuş araması başlatın</p>
+                <a href="{{ url_for('flights.search') }}" class="btn btn-primary">
+                    <i class="fas fa-search"></i> Ara
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-list fa-2x text-success mb-2"></i>
+                <h5 class="card-title">Aramalarım</h5>
+                <p class="card-text">Kayıtlı aramalarınızı görüntüleyin</p>
+                <a href="{{ url_for('flights.my_searches') }}" class="btn btn-success">
+                    <i class="fas fa-list"></i> Görüntüle
+                </a>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-bell fa-2x text-warning mb-2"></i>
+                <h5 class="card-title">Bildirimler</h5>
+                <p class="card-text">{{ notifications|length }} okunmamış bildirim</p>
+                <button class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+                    <i class="fas fa-bell"></i> Görüntüle
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3 mb-4">
+        <div class="card text-center h-100">
+            <div class="card-body">
+                <i class="fas fa-user fa-2x text-info mb-2"></i>
+                <h5 class="card-title">Profil</h5>
+                <p class="card-text">Hesap ayarlarınızı yönetin</p>
+                <a href="{{ url_for('auth.profile') }}" class="btn btn-info">
+                    <i class="fas fa-user"></i> Görüntüle
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-clock"></i> Son Aramalarım</h5>
+            </div>
+            <div class="card-body">
+                {% if recent_searches %}
+                    <div class="table-responsive">
+                        <table class="table table-hover">
+                            <thead>
+                                <tr>
+                                    <th>Rota</th>
+                                    <th>Tarih</th>
+                                    <th>Yolcu</th>
+                                    <th>Durum</th>
+                                    <th>İşlem</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for search in recent_searches %}
+                                <tr>
+                                    <td>
+                                        <strong>{{ search.origin }} → {{ search.destination }}</strong>
+                                    </td>
+                                    <td>
+                                        {{ search.departure_date.strftime('%d.%m.%Y') }}
+                                        {% if search.return_date %}
+                                            - {{ search.return_date.strftime('%d.%m.%Y') }}
+                                        {% endif %}
+                                    </td>
+                                    <td>{{ search.passenger_count }} kişi</td>
+                                    <td>
+                                        <span class="badge bg-{{ 'success' if search.is_active else 'secondary' }}">
+                                            {{ 'Aktif' if search.is_active else 'Pasif' }}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <a href="{{ url_for('flights.results', search_id=search.id) }}" 
+                                           class="btn btn-sm btn-primary">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% else %}
+                    <p class="text-muted">Henüz arama yapmadınız. <a href="{{ url_for('flights.search') }}">İlk aramanızı başlatın</a>.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-bell"></i> Bildirimler</h5>
+            </div>
+            <div class="card-body">
+                {% if notifications %}
+                    {% for notification in notifications[:5] %}
+                        <div class="alert alert-{{ notification.type }} alert-sm mb-2">
+                            <small class="text-muted">{{ notification.created_at.strftime('%d.%m %H:%M') }}</small>
+                            <div><strong>{{ notification.title }}</strong></div>
+                            <div>{{ notification.message[:100] }}{% if notification.message|length > 100 %}...{% endif %}</div>
+                        </div>
+                    {% endfor %}
+                    {% if notifications|length > 5 %}
+                        <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#notificationsModal">
+                            Tümünü Görüntüle ({{ notifications|length }})
+                        </button>
+                    {% endif %}
+                {% else %}
+                    <p class="text-muted">Bildiriminiz bulunmuyor.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Notifications Modal -->
+<div class="modal fade" id="notificationsModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Bildirimler</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                {% if notifications %}
+                    {% for notification in notifications %}
+                        <div class="alert alert-{{ notification.type }}">
+                            <div class="d-flex justify-content-between">
+                                <strong>{{ notification.title }}</strong>
+                                <small class="text-muted">{{ notification.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                            </div>
+                            <div class="mt-2">{{ notification.message }}</div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <p class="text-muted">Bildiriminiz bulunmuyor.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -16,11 +16,15 @@ parts/
 sdist/
 var/
 wheels/
+share/python-wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+MANIFEST
 
-# Environment
+# Flask
+instance/
+.webassets-cache
 .env
 .venv
 env/
@@ -33,6 +37,7 @@ venv.bak/
 *.db
 *.sqlite
 *.sqlite3
+flight_tracker.db
 
 # IDE
 .vscode/
@@ -41,7 +46,24 @@ venv.bak/
 *.swo
 *~
 
-# OS
+# Logs
+*.log
+logs/
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# Node.js (if using npm for frontend)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Operating System
 .DS_Store
 .DS_Store?
 ._*
@@ -50,14 +72,18 @@ venv.bak/
 ehthumbs.db
 Thumbs.db
 
-# Logs
-logs/
-*.log
-
 # Temporary files
-tmp/
-temp/
+*.tmp
+*.temp
 .tmp/
 
-# Node modules (if using npm for frontend assets)
-node_modules/
+# AL/Business Central (legacy)
+.alcache/
+.alpackages/
+.snapshots/
+.output/
+*.app
+rad.json
+*.g.xlf
+*.flf
+TestResults.xml
