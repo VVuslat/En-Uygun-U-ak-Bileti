@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block title %}Profil - En Uygun Uçak Bileti{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-user"></i> Profil Bilgileri</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Ad Soyad:</strong> {{ user.get_full_name() }}</p>
+                        <p><strong>E-posta:</strong> {{ user.email }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Kayıt Tarihi:</strong> {{ user.created_at.strftime('%d.%m.%Y') }}</p>
+                        <p><strong>Son Giriş:</strong> 
+                            {% if user.last_login %}
+                                {{ user.last_login.strftime('%d.%m.%Y %H:%M') }}
+                            {% else %}
+                                Bilinmiyor
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar"></i> İstatistikler</h5>
+            </div>
+            <div class="card-body">
+                <p><strong>Toplam Arama:</strong> {{ user.flight_searches|length }}</p>
+                <p><strong>Aktif Takip:</strong> 
+                    {{ user.flight_searches|selectattr('is_active')|list|length }}
+                </p>
+                <p><strong>Bildirimler:</strong> {{ user.notifications|length }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
