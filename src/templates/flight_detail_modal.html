@@ -1,0 +1,148 @@
+<!-- Flight Detail Modal -->
+<div class="modal-backdrop fixed inset-0 bg-black bg-opacity-50 transition-opacity" 
+     onclick="closeFlightModal()"
+     aria-hidden="true"></div>
+
+<div class="fixed inset-0 flex items-center justify-center p-4 pointer-events-none">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto pointer-events-auto fade-in"
+         role="document">
+        <!-- Modal Header -->
+        <div class="bg-blue-600 text-white px-6 py-4 rounded-t-lg flex justify-between items-center">
+            <h2 id="modal-title" class="text-xl font-bold">
+                <i class="fas fa-plane-departure mr-2" aria-hidden="true"></i>
+                Uçuş Detayları
+            </h2>
+            <button type="button" 
+                    onclick="closeFlightModal()"
+                    class="text-white hover:text-gray-200 focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-blue-600 rounded"
+                    aria-label="Kapat">
+                <i class="fas fa-times text-2xl" aria-hidden="true"></i>
+            </button>
+        </div>
+        
+        <!-- Modal Body -->
+        <div id="modal-body" class="p-6">
+            <!-- Loading state -->
+            <div id="modal-loading" class="text-center py-12">
+                <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+                <p class="mt-4 text-gray-600">Uçuş detayları yükleniyor...</p>
+            </div>
+            
+            <!-- Content will be loaded here -->
+            <div id="modal-content" class="hidden">
+                <!-- Flight basic info -->
+                <div class="mb-6">
+                    <div class="flex items-center mb-4">
+                        <div class="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mr-4">
+                            <i class="fas fa-plane text-blue-600 text-2xl" aria-hidden="true"></i>
+                        </div>
+                        <div>
+                            <h3 id="modal-airline" class="text-xl font-bold text-gray-900"></h3>
+                            <p id="modal-flight-number" class="text-gray-600"></p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Flight route -->
+                <div class="bg-gray-50 rounded-lg p-6 mb-6">
+                    <div class="flex items-center justify-between">
+                        <!-- Departure -->
+                        <div class="text-center flex-1">
+                            <p class="text-sm text-gray-500 mb-1">Kalkış</p>
+                            <p id="modal-departure-time" class="text-3xl font-bold text-gray-900"></p>
+                            <p id="modal-origin" class="text-gray-600 mt-1"></p>
+                            <p id="modal-departure-date" class="text-sm text-gray-500 mt-2"></p>
+                        </div>
+                        
+                        <!-- Arrow -->
+                        <div class="px-4">
+                            <i class="fas fa-arrow-right text-blue-600 text-2xl" aria-hidden="true"></i>
+                        </div>
+                        
+                        <!-- Arrival -->
+                        <div class="text-center flex-1">
+                            <p class="text-sm text-gray-500 mb-1">Varış</p>
+                            <p id="modal-arrival-time" class="text-3xl font-bold text-gray-900"></p>
+                            <p id="modal-destination" class="text-gray-600 mt-1"></p>
+                            <p id="modal-arrival-date" class="text-sm text-gray-500 mt-2"></p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4 text-center">
+                        <p class="text-sm text-gray-600">
+                            <i class="fas fa-clock mr-1" aria-hidden="true"></i>
+                            <span id="modal-duration"></span> uçuş süresi
+                        </p>
+                        <p id="modal-stops" class="text-sm mt-1"></p>
+                    </div>
+                </div>
+                
+                <!-- Flight details grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <p class="text-sm text-gray-500 mb-1">
+                            <i class="fas fa-plane-departure mr-2" aria-hidden="true"></i>
+                            Uçak Tipi
+                        </p>
+                        <p id="modal-aircraft" class="font-semibold text-gray-900"></p>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <p class="text-sm text-gray-500 mb-1">
+                            <i class="fas fa-suitcase mr-2" aria-hidden="true"></i>
+                            Bagaj Hakkı
+                        </p>
+                        <p id="modal-baggage" class="font-semibold text-gray-900"></p>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <p class="text-sm text-gray-500 mb-1">
+                            <i class="fas fa-chair mr-2" aria-hidden="true"></i>
+                            Kabin Sınıfı
+                        </p>
+                        <p id="modal-cabin-class" class="font-semibold text-gray-900"></p>
+                    </div>
+                    
+                    <div class="bg-white border border-gray-200 rounded-lg p-4">
+                        <p class="text-sm text-gray-500 mb-1">
+                            <i class="fas fa-users mr-2" aria-hidden="true"></i>
+                            Müsait Koltuk
+                        </p>
+                        <p id="modal-seats" class="font-semibold text-gray-900"></p>
+                    </div>
+                </div>
+                
+                <!-- Policy info -->
+                <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-6">
+                    <p class="text-sm text-gray-700">
+                        <i class="fas fa-shield-alt mr-2 text-yellow-600" aria-hidden="true"></i>
+                        <strong>İptal/Değişiklik Politikası:</strong>
+                        <span id="modal-policy"></span>
+                    </p>
+                </div>
+                
+                <!-- Price -->
+                <div class="bg-blue-50 rounded-lg p-6 text-center">
+                    <p class="text-sm text-gray-600 mb-2">Toplam Fiyat</p>
+                    <p id="modal-price" class="text-4xl font-bold text-blue-600"></p>
+                    <p class="text-sm text-gray-500 mt-2">Yolcu başına</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Modal Footer -->
+        <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex justify-end space-x-3">
+            <button type="button"
+                    onclick="closeFlightModal()"
+                    class="px-4 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                Kapat
+            </button>
+            <button type="button"
+                    class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                    disabled>
+                <i class="fas fa-ticket-alt mr-2" aria-hidden="true"></i>
+                Rezervasyon Yap
+            </button>
+        </div>
+    </div>
+</div>
