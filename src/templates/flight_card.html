@@ -1,0 +1,100 @@
+<!-- Flight Card Partial -->
+<article class="bg-white rounded-lg shadow hover:shadow-lg transition-shadow p-6 border border-gray-200" 
+         role="listitem"
+         data-flight-id="{{ flight.id }}"
+         data-price="{{ flight.price }}"
+         data-airline="{{ flight.airline }}">
+    <div class="flex flex-col lg:flex-row lg:items-center justify-between gap-4">
+        <!-- Flight Info -->
+        <div class="flex-1">
+            <!-- Airline -->
+            <div class="flex items-center mb-3">
+                <div class="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center mr-3">
+                    <i class="fas fa-plane text-blue-600 text-xl" aria-hidden="true"></i>
+                </div>
+                <div>
+                    <h3 class="font-semibold text-gray-900">{{ flight.airline }}</h3>
+                    <p class="text-sm text-gray-500">{{ flight.flightNumber }}</p>
+                </div>
+            </div>
+            
+            <!-- Route and Time -->
+            <div class="flex items-center space-x-4 text-sm">
+                <!-- Departure -->
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-gray-900">
+                        {{ flight.departure | format_datetime('time') }}
+                    </p>
+                    <p class="text-gray-500">{{ flight.origin }}</p>
+                </div>
+                
+                <!-- Duration and Route -->
+                <div class="flex-1 relative px-4">
+                    <div class="border-t-2 border-gray-300 relative">
+                        <i class="fas fa-plane absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white px-2 text-gray-400 rotate-90" aria-hidden="true"></i>
+                    </div>
+                    <div class="text-center mt-2">
+                        <p class="text-xs text-gray-500">
+                            {{ flight.duration_minutes | format_duration }}
+                        </p>
+                        {% if flight.stops == 0 %}
+                        <p class="text-xs text-green-600 font-medium">Direkt</p>
+                        {% elif flight.stops == 1 %}
+                        <p class="text-xs text-orange-600">1 Aktarma</p>
+                        {% else %}
+                        <p class="text-xs text-orange-600">{{ flight.stops }} Aktarma</p>
+                        {% endif %}
+                    </div>
+                </div>
+                
+                <!-- Arrival -->
+                <div class="text-center">
+                    <p class="text-2xl font-bold text-gray-900">
+                        {{ flight.arrival | format_datetime('time') }}
+                    </p>
+                    <p class="text-gray-500">{{ flight.destination }}</p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Price and Action -->
+        <div class="flex flex-col items-center lg:items-end space-y-3 lg:border-l lg:pl-6">
+            <!-- Price -->
+            <div class="text-center lg:text-right">
+                <p class="text-3xl font-bold text-blue-600">
+                    {{ flight.price | format_currency(flight.currency) }}
+                </p>
+                <p class="text-xs text-gray-500 mt-1">Yolcu başına</p>
+            </div>
+            
+            <!-- Details Button -->
+            <button type="button"
+                    onclick="openFlightModal('{{ flight.id }}')"
+                    class="w-full lg:w-auto px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 transition-colors"
+                    aria-label="Uçuş detaylarını görüntüle: {{ flight.airline }} {{ flight.flightNumber }}">
+                <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                Detaylar
+            </button>
+        </div>
+    </div>
+    
+    <!-- Additional Info -->
+    <div class="mt-4 pt-4 border-t border-gray-200 flex flex-wrap gap-4 text-xs text-gray-500">
+        <span class="flex items-center">
+            <i class="fas fa-suitcase mr-1" aria-hidden="true"></i>
+            {{ flight.baggage_allowance }}
+        </span>
+        <span class="flex items-center">
+            <i class="fas fa-chair mr-1" aria-hidden="true"></i>
+            {{ flight.cabin_class }}
+        </span>
+        <span class="flex items-center">
+            <i class="fas fa-users mr-1" aria-hidden="true"></i>
+            {{ flight.available_seats }} koltuk müsait
+        </span>
+        <span class="flex items-center">
+            <i class="fas fa-shield-alt mr-1" aria-hidden="true"></i>
+            {{ flight.policy }}
+        </span>
+    </div>
+</article>

@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="tr" class="h-full">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="En uygun uçak biletlerini bulun - MYK Seviye 5 uyumlu">
+    <title>{% block title %}En Uygun Uçak Bileti{% endblock %}</title>
+    
+    <!-- TailwindCSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/tailwind.css') }}">
+    
+    <style>
+        /* Custom animations and utilities */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .fade-in {
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        /* Modal backdrop */
+        .modal-backdrop {
+            background-color: rgba(0, 0, 0, 0.5);
+        }
+        
+        /* Focus visible for accessibility */
+        *:focus-visible {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+    </style>
+    
+    {% block extra_head %}{% endblock %}
+</head>
+<body class="h-full bg-gray-50">
+    <!-- Skip to main content link for accessibility -->
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:absolute focus:top-0 focus:left-0 bg-blue-600 text-white px-4 py-2 z-50">
+        Ana içeriğe atla
+    </a>
+
+    <!-- Header / Navigation -->
+    <nav class="bg-white shadow-sm" role="navigation" aria-label="Ana navigasyon">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <!-- Logo -->
+                <div class="flex-shrink-0">
+                    <a href="{{ url_for('index') }}" class="text-xl font-bold text-blue-600 hover:text-blue-700 transition-colors">
+                        <i class="fas fa-plane-departure mr-2" aria-hidden="true"></i>
+                        <span>En Uygun Uçak Bileti</span>
+                    </a>
+                </div>
+                
+                <!-- Navigation Links -->
+                <div class="hidden md:flex space-x-4">
+                    <a href="{{ url_for('index') }}" 
+                       class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors"
+                       {% if request.endpoint == 'index' %}aria-current="page"{% endif %}>
+                        <i class="fas fa-search mr-1" aria-hidden="true"></i>
+                        Arama
+                    </a>
+                    <a href="#" 
+                       class="text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium transition-colors">
+                        <i class="fas fa-info-circle mr-1" aria-hidden="true"></i>
+                        Hakkında
+                    </a>
+                </div>
+                
+                <!-- Mobile menu button -->
+                <div class="md:hidden">
+                    <button type="button" 
+                            class="text-gray-700 hover:text-blue-600 p-2 rounded-md"
+                            aria-label="Menüyü aç"
+                            onclick="toggleMobileMenu()">
+                        <i class="fas fa-bars text-xl" aria-hidden="true"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu (hidden by default) -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-gray-200">
+            <div class="px-2 pt-2 pb-3 space-y-1">
+                <a href="{{ url_for('index') }}" 
+                   class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                    <i class="fas fa-search mr-2" aria-hidden="true"></i>
+                    Arama
+                </a>
+                <a href="#" 
+                   class="block px-3 py-2 rounded-md text-base font-medium text-gray-700 hover:text-blue-600 hover:bg-gray-50">
+                    <i class="fas fa-info-circle mr-2" aria-hidden="true"></i>
+                    Hakkında
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main id="main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8" role="main">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-white border-t border-gray-200 mt-12" role="contentinfo">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- About -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Hakkında</h3>
+                    <p class="text-sm text-gray-600">
+                        Flask + Jinja2 ile hazırlanmış, MYK Yazılım Geliştirici Seviye 5 
+                        yönergesine uygun uçak bileti arama projesi.
+                    </p>
+                </div>
+                
+                <!-- Quick Links -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Hızlı Bağlantılar</h3>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="{{ url_for('index') }}" class="text-gray-600 hover:text-blue-600">Arama</a></li>
+                        <li><a href="{{ url_for('api_mock_flights') }}?origin=IST&destination=AYT&departure_date=2025-10-10" class="text-gray-600 hover:text-blue-600">API Dokümantasyonu</a></li>
+                    </ul>
+                </div>
+                
+                <!-- Compliance -->
+                <div>
+                    <h3 class="text-lg font-semibold text-gray-900 mb-3">Standartlar</h3>
+                    <ul class="space-y-2 text-sm text-gray-600">
+                        <li><i class="fas fa-check text-green-600 mr-2" aria-hidden="true"></i>MYK Seviye 5 Uyumlu</li>
+                        <li><i class="fas fa-check text-green-600 mr-2" aria-hidden="true"></i>WCAG 2.1 Erişilebilirlik</li>
+                        <li><i class="fas fa-check text-green-600 mr-2" aria-hidden="true"></i>Responsive Tasarım</li>
+                        <li><i class="fas fa-check text-green-600 mr-2" aria-hidden="true"></i>Test Coverage</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-200 mt-8 pt-8 text-center text-sm text-gray-600">
+                <p>&copy; 2025 En Uygun Uçak Bileti. Tüm hakları saklıdır.</p>
+                <p class="mt-2">
+                    <a href="https://github.com/VVuslat/En-Uygun-U-ak-Bileti" 
+                       class="text-blue-600 hover:text-blue-700"
+                       target="_blank"
+                       rel="noopener noreferrer">
+                        <i class="fab fa-github mr-1" aria-hidden="true"></i>
+                        GitHub'da Görüntüle
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+    </script>
+    
+    {% block extra_scripts %}{% endblock %}
+</body>
+</html>

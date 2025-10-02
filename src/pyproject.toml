@@ -1,0 +1,56 @@
+[tool.black]
+line-length = 100
+target-version = ['py38', 'py39', 'py310', 'py311']
+include = '\.pyi?$'
+extend-exclude = '''
+/(
+  # directories
+  \.eggs
+  | \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | build
+  | dist
+)/
+'''
+
+[tool.pytest.ini_options]
+minversion = "6.0"
+addopts = "-ra -q --strict-markers"
+testpaths = [
+    "src/tests",
+]
+python_files = "test_*.py"
+python_classes = "Test*"
+python_functions = "test_*"
+
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "en-uygun-ucak-bileti-frontend"
+version = "1.0.0"
+description = "Flask + Jinja2 ile hazırlanmış, MYK Yazılım Geliştirici Seviye 5 yönergesine uygun uçak bileti arama frontend projesi"
+authors = [
+    {name = "En Uygun Team"}
+]
+requires-python = ">=3.8"
+dependencies = [
+    "flask>=2.3.0",
+    "pytest>=7.4.0",
+    "pytest-flask>=1.2.0",
+    "black>=23.0.0",
+    "flake8>=6.0.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "black",
+    "flake8",
+    "pytest",
+    "pytest-flask",
+    "pytest-cov",
+]

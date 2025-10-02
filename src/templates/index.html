@@ -1,0 +1,274 @@
+{% extends "base.html" %}
+
+{% block title %}Uçak Bileti Arama - En Uygun Uçak Bileti{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg shadow-lg p-8 mb-8 text-white">
+    <div class="max-w-3xl mx-auto text-center">
+        <h1 class="text-4xl font-bold mb-4">
+            <i class="fas fa-plane-departure mr-3" aria-hidden="true"></i>
+            En Uygun Uçak Biletini Bul
+        </h1>
+        <p class="text-lg opacity-90">
+            Yüzlerce uçuşu karşılaştır, en uygun fiyatı bul
+        </p>
+    </div>
+</div>
+
+<!-- Error Message -->
+{% if error %}
+<div class="bg-red-50 border-l-4 border-red-500 p-4 mb-6 rounded fade-in" role="alert">
+    <div class="flex">
+        <div class="flex-shrink-0">
+            <i class="fas fa-exclamation-circle text-red-500" aria-hidden="true"></i>
+        </div>
+        <div class="ml-3">
+            <p class="text-sm text-red-700">{{ error }}</p>
+        </div>
+    </div>
+</div>
+{% endif %}
+
+<!-- Search Form -->
+<div class="bg-white rounded-lg shadow-lg p-8 max-w-4xl mx-auto">
+    <form method="POST" action="{{ url_for('flights') }}" id="search-form" novalidate>
+        <!-- Trip Type Selection -->
+        <div class="mb-6">
+            <fieldset>
+                <legend class="text-sm font-medium text-gray-700 mb-2">Yolculuk Tipi</legend>
+                <div class="flex space-x-4">
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" 
+                               name="trip_type" 
+                               value="one-way" 
+                               checked
+                               class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-gray-700">Tek Yön</span>
+                    </label>
+                    <label class="flex items-center cursor-pointer">
+                        <input type="radio" 
+                               name="trip_type" 
+                               value="round-trip"
+                               class="w-4 h-4 text-blue-600 focus:ring-blue-500">
+                        <span class="ml-2 text-gray-700">Gidiş-Dönüş</span>
+                    </label>
+                </div>
+            </fieldset>
+        </div>
+
+        <!-- Origin and Destination -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Origin -->
+            <div>
+                <label for="origin" class="block text-sm font-medium text-gray-700 mb-2">
+                    Kalkış Havalimanı <span class="text-red-500" aria-label="zorunlu">*</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-plane-departure text-gray-400" aria-hidden="true"></i>
+                    </div>
+                    <input type="text" 
+                           id="origin" 
+                           name="origin" 
+                           required
+                           maxlength="3"
+                           pattern="[A-Za-z]{3}"
+                           placeholder="Örn: IST"
+                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase"
+                           aria-required="true"
+                           aria-describedby="origin-help">
+                </div>
+                <p id="origin-help" class="mt-1 text-xs text-gray-500">
+                    3 harfli havalimanı kodu (örn: IST, SAW, ESB)
+                </p>
+            </div>
+
+            <!-- Destination -->
+            <div>
+                <label for="destination" class="block text-sm font-medium text-gray-700 mb-2">
+                    Varış Havalimanı <span class="text-red-500" aria-label="zorunlu">*</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-plane-arrival text-gray-400" aria-hidden="true"></i>
+                    </div>
+                    <input type="text" 
+                           id="destination" 
+                           name="destination" 
+                           required
+                           maxlength="3"
+                           pattern="[A-Za-z]{3}"
+                           placeholder="Örn: AYT"
+                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 uppercase"
+                           aria-required="true"
+                           aria-describedby="destination-help">
+                </div>
+                <p id="destination-help" class="mt-1 text-xs text-gray-500">
+                    3 harfli havalimanı kodu (örn: AYT, ADB, DLM)
+                </p>
+            </div>
+        </div>
+
+        <!-- Dates -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <!-- Departure Date -->
+            <div>
+                <label for="departure_date" class="block text-sm font-medium text-gray-700 mb-2">
+                    Gidiş Tarihi <span class="text-red-500" aria-label="zorunlu">*</span>
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-calendar text-gray-400" aria-hidden="true"></i>
+                    </div>
+                    <input type="date" 
+                           id="departure_date" 
+                           name="departure_date" 
+                           required
+                           min="{{ form.get_min_date() }}"
+                           value="{{ form.get_default_date() }}"
+                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                           aria-required="true">
+                </div>
+            </div>
+
+            <!-- Return Date -->
+            <div id="return-date-wrapper">
+                <label for="return_date" class="block text-sm font-medium text-gray-700 mb-2">
+                    Dönüş Tarihi
+                </label>
+                <div class="relative">
+                    <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <i class="fas fa-calendar text-gray-400" aria-hidden="true"></i>
+                    </div>
+                    <input type="date" 
+                           id="return_date" 
+                           name="return_date" 
+                           disabled
+                           min="{{ form.get_min_date() }}"
+                           class="block w-full pl-10 pr-3 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 disabled:bg-gray-100 disabled:cursor-not-allowed">
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit Button -->
+        <div class="flex justify-center">
+            <button type="submit" 
+                    class="w-full md:w-auto px-8 py-3 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition-colors shadow-lg">
+                <i class="fas fa-search mr-2" aria-hidden="true"></i>
+                Uçuş Ara
+            </button>
+        </div>
+    </form>
+</div>
+
+<!-- Popular Routes -->
+<div class="mt-12 max-w-4xl mx-auto">
+    <h2 class="text-2xl font-bold text-gray-900 mb-6 text-center">Popüler Rotalar</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {% set popular_routes = [
+            ('IST', 'AYT', 'İstanbul - Antalya'),
+            ('IST', 'ADB', 'İstanbul - İzmir'),
+            ('ESB', 'AYT', 'Ankara - Antalya'),
+            ('SAW', 'ADB', 'Sabiha Gökçen - İzmir'),
+            ('IST', 'DLM', 'İstanbul - Dalaman'),
+            ('ESB', 'ADB', 'Ankara - İzmir')
+        ] %}
+        
+        {% for origin, dest, name in popular_routes %}
+        <a href="{{ url_for('flights', origin=origin, destination=dest, departure_date=form.get_default_date()) }}" 
+           class="block p-4 bg-white rounded-lg shadow hover:shadow-lg transition-shadow border border-gray-200 hover:border-blue-300">
+            <div class="flex items-center justify-between">
+                <div>
+                    <p class="text-sm text-gray-600">{{ name }}</p>
+                    <p class="text-xs text-gray-500 mt-1">{{ origin }} → {{ dest }}</p>
+                </div>
+                <i class="fas fa-arrow-right text-blue-600" aria-hidden="true"></i>
+            </div>
+        </a>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Popular Airports Info -->
+<div class="mt-12 max-w-4xl mx-auto bg-blue-50 rounded-lg p-6">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">
+        <i class="fas fa-info-circle text-blue-600 mr-2" aria-hidden="true"></i>
+        Yaygın Havalimanı Kodları
+    </h3>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+        <ul class="space-y-2">
+            {% for code, name in form.POPULAR_AIRPORTS.items() %}
+            {% if loop.index <= 5 %}
+            <li class="text-gray-700">
+                <strong class="text-blue-600">{{ code }}</strong> - {{ name }}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+        <ul class="space-y-2">
+            {% for code, name in form.POPULAR_AIRPORTS.items() %}
+            {% if loop.index > 5 %}
+            <li class="text-gray-700">
+                <strong class="text-blue-600">{{ code }}</strong> - {{ name }}
+            </li>
+            {% endif %}
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script>
+    // Trip type toggle
+    const tripTypeInputs = document.querySelectorAll('input[name="trip_type"]');
+    const returnDateInput = document.getElementById('return_date');
+    const returnDateWrapper = document.getElementById('return-date-wrapper');
+    
+    tripTypeInputs.forEach(input => {
+        input.addEventListener('change', function() {
+            if (this.value === 'round-trip') {
+                returnDateInput.disabled = false;
+                returnDateInput.required = true;
+            } else {
+                returnDateInput.disabled = true;
+                returnDateInput.required = false;
+                returnDateInput.value = '';
+            }
+        });
+    });
+    
+    // Date validation
+    const departureDateInput = document.getElementById('departure_date');
+    
+    departureDateInput.addEventListener('change', function() {
+        // Update return date minimum to be after departure date
+        returnDateInput.min = this.value;
+        
+        // If return date is before departure date, clear it
+        if (returnDateInput.value && returnDateInput.value < this.value) {
+            returnDateInput.value = '';
+        }
+    });
+    
+    // Form validation
+    document.getElementById('search-form').addEventListener('submit', function(e) {
+        const origin = document.getElementById('origin').value.trim().toUpperCase();
+        const destination = document.getElementById('destination').value.trim().toUpperCase();
+        
+        if (origin === destination) {
+            e.preventDefault();
+            alert('Kalkış ve varış havalimanı aynı olamaz!');
+            return false;
+        }
+    });
+    
+    // Auto-uppercase airport codes
+    ['origin', 'destination'].forEach(id => {
+        document.getElementById(id).addEventListener('input', function(e) {
+            this.value = this.value.toUpperCase();
+        });
+    });
+</script>
+{% endblock %}
