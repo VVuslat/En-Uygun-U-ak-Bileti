@@ -1,0 +1,35 @@
+{
+  "name": "en-uygun-ucak-bileti-frontend",
+  "version": "1.0.0",
+  "description": "MYK Seviye 5 uyumlu statik frontend - uçak bileti arama ve takip arayüzü",
+  "type": "module",
+  "scripts": {
+    "start": "npx serve . -p 3000",
+    "dev": "npx serve . -p 3000",
+    "serve": "npx serve . -p 3000",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:ui": "vitest --ui",
+    "test:coverage": "vitest run --coverage"
+  },
+  "keywords": [
+    "flight",
+    "ticket",
+    "search",
+    "frontend",
+    "myk",
+    "static",
+    "vanilla-js"
+  ],
+  "author": "VVuslat",
+  "license": "MIT",
+  "devDependencies": {
+    "@vitest/ui": "^1.0.4",
+    "jsdom": "^23.0.1",
+    "serve": "^14.2.1",
+    "vitest": "^1.0.4"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  }
+}
