@@ -25,18 +25,6 @@ MANIFEST
 # Flask
 instance/
 .webassets-cache
-.env
-.venv
-env/
-venv/
-ENV/
-env.bak/
-venv.bak/
-
-# Database
-*.db
-*.sqlite
-*.sqlite3
 flight_tracker.db
 
 # IDE
@@ -64,6 +52,7 @@ yarn-debug.log*
 yarn-error.log*
 
 # Operating System
+
 .DS_Store
 .DS_Store?
 ._*
