@@ -1,84 +1,104 @@
 {% extends "base.html" %}
 
+{% block title %}Anasayfa - En Uygun Uçak Bileti{% endblock %}
+
 {% block content %}
+<div class="hero-section bg-primary text-white py-5 rounded mb-5">
+    <div class="container text-center">
+        <h1 class="display-4 mb-4">
+            <i class="fas fa-plane"></i>
+            En Uygun Uçak Biletlerini Keşfedin
+        </h1>
+        <p class="lead mb-4">
+            Gitmek istediğiniz destinasyona en uygun fiyatlı uçak biletlerini bulun ve takip edin.
+        </p>
+        <a href="{{ url_for('auth.register') }}" class="btn btn-light btn-lg me-3">
+            <i class="fas fa-user-plus"></i> Hemen Kayıt Ol
+        </a>
+        <a href="{{ url_for('auth.login') }}" class="btn btn-outline-light btn-lg">
+            <i class="fas fa-sign-in-alt"></i> Giriş Yap
+        </a>
+    </div>
+</div>
+
 <div class="row">
-    <div class="col-md-8 mx-auto text-center">
-        <h1 class="display-4 mb-4">En Uygun Uçak Biletini Bulun</h1>
-        <p class="lead mb-4">Türkiye'nin en kapsamlı uçak bileti karşılaştırma platformu ile en uygun fiyatları keşfedin.</p>
-        
-        <div class="card">
-            <div class="card-body">
-                <form action="{{ url_for('search_flights') }}" method="POST">
-                    <div class="row mb-3">
-                        <div class="col-md-4">
-                            <label for="departure" class="form-label">Nereden</label>
-                            <select class="form-select" id="departure" name="departure" required>
-                                <option value="">Şehir seçiniz</option>
-                                <option value="İstanbul">İstanbul</option>
-                                <option value="Ankara">Ankara</option>
-                                <option value="İzmir">İzmir</option>
-                                <option value="Antalya">Antalya</option>
-                                <option value="Adana">Adana</option>
-                                <option value="Trabzon">Trabzon</option>
-                                <option value="Gaziantep">Gaziantep</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="destination" class="form-label">Nereye</label>
-                            <select class="form-select" id="destination" name="destination" required>
-                                <option value="">Şehir seçiniz</option>
-                                <option value="İstanbul">İstanbul</option>
-                                <option value="Ankara">Ankara</option>
-                                <option value="İzmir">İzmir</option>
-                                <option value="Antalya">Antalya</option>
-                                <option value="Adana">Adana</option>
-                                <option value="Trabzon">Trabzon</option>
-                                <option value="Gaziantep">Gaziantep</option>
-                            </select>
-                        </div>
-                        <div class="col-md-4">
-                            <label for="date" class="form-label">Tarih</label>
-                            <input type="date" class="form-control" id="date" name="date" required>
-                        </div>
-                    </div>
-                    <button type="submit" class="btn btn-primary btn-lg">🔍 Uçuş Ara</button>
-                </form>
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-search fa-3x text-primary mb-3"></i>
+                <h5 class="card-title">Uçuş Arama</h5>
+                <p class="card-text">
+                    Detaylı filtreleme seçenekleri ile istediğiniz kriterlere uygun uçuşları arayın.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-bell fa-3x text-success mb-3"></i>
+                <h5 class="card-title">Fiyat Takibi</h5>
+                <p class="card-text">
+                    Fiyat düşüşlerinden anında haberdar olun ve en uygun anı yakalayın.
+                </p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4 mb-4">
+        <div class="card h-100">
+            <div class="card-body text-center">
+                <i class="fas fa-shield-alt fa-3x text-info mb-3"></i>
+                <h5 class="card-title">Güvenli Platform</h5>
+                <p class="card-text">
+                    MYK Seviye 5 standartlarına uygun güvenli ve güvenilir hizmet.
+                </p>
             </div>
         </div>
     </div>
 </div>
 
-<div class="row mt-5">
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <h5 class="card-title">💰 En İyi Fiyatlar</h5>
-                <p class="card-text">Tüm havayollarından en uygun fiyatları karşılaştırarak size en iyi seçenekleri sunuyoruz.</p>
-            </div>
+<div class="bg-light p-4 rounded">
+    <h3 class="text-center mb-4">Nasıl Çalışır?</h3>
+    <div class="row">
+        <div class="col-md-3 text-center mb-3">
+            <div class="step-number bg-primary text-white rounded-circle mx-auto mb-2">1</div>
+            <h6>Kayıt Olun</h6>
+            <small class="text-muted">Ücretsiz hesap oluşturun</small>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <h5 class="card-title">⚡ Hızlı Arama</h5>
-                <p class="card-text">Gelişmiş algoritmasıyla saniyeler içinde binlerce uçuş seçeneğini tarayıp en uygununu bulur.</p>
-            </div>
+        <div class="col-md-3 text-center mb-3">
+            <div class="step-number bg-primary text-white rounded-circle mx-auto mb-2">2</div>
+            <h6>Uçuş Arayın</h6>
+            <small class="text-muted">Seyahat kriterlerinizi girin</small>
         </div>
-    </div>
-    <div class="col-md-4">
-        <div class="card h-100">
-            <div class="card-body text-center">
-                <h5 class="card-title">🔔 Fiyat Uyarıları</h5>
-                <p class="card-text">İstediğiniz rotada fiyat düşüşlerini takip edin ve anında bildirim alın.</p>
-            </div>
+        <div class="col-md-3 text-center mb-3">
+            <div class="step-number bg-primary text-white rounded-circle mx-auto mb-2">3</div>
+            <h6>Takip Edin</h6>
+            <small class="text-muted">Fiyat değişikliklerini izleyin</small>
+        </div>
+        <div class="col-md-3 text-center mb-3">
+            <div class="step-number bg-primary text-white rounded-circle mx-auto mb-2">4</div>
+            <h6>Rezervasyon Yapın</h6>
+            <small class="text-muted">En uygun fiyatta bileti alın</small>
         </div>
     </div>
 </div>
 {% endblock %}
 
 {% block scripts %}
-<script>
-// Set minimum date to today
-document.getElementById('date').min = new Date().toISOString().split('T')[0];
-</script>
+<style>
+.hero-section {
+    background: linear-gradient(135deg, #007bff 0%, #0056b3 100%);
+}
+
+.step-number {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+}
+</style>
 {% endblock %}

@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+
+{% block title %}Uçuş Ara - En Uygun Uçak Bileti{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h4><i class="fas fa-search"></i> Uçuş Ara</h4>
+            </div>
+            <div class="card-body">
+                <form method="POST" id="flight-search-form">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="origin" class="form-label">Kalkış Havalimanı</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control airport-input" id="origin" name="origin" 
+                                       placeholder="Örn: IST" maxlength="3" required 
+                                       data-bs-toggle="tooltip" title="3 haneli havalimanı kodu girin">
+                                <span class="input-group-text"><i class="fas fa-plane-departure"></i></span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="destination" class="form-label">Varış Havalimanı</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control airport-input" id="destination" name="destination"
+                                       placeholder="Örn: AYT" maxlength="3" required
+                                       data-bs-toggle="tooltip" title="3 haneli havalimanı kodu girin">
+                                <span class="input-group-text"><i class="fas fa-plane-arrival"></i></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="departure_date" class="form-label">Gidiş Tarihi</label>
+                            <input type="date" class="form-control" id="departure_date" name="departure_date" required>
+                        </div>
+                        
+                        <div class="col-md-6 mb-3">
+                            <label for="return_date" class="form-label">Dönüş Tarihi</label>
+                            <input type="date" class="form-control" id="return_date" name="return_date">
+                            <div class="form-text">Tek yön bilet için boş bırakın</div>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-4 mb-3">
+                            <label for="passenger_count" class="form-label">Yolcu Sayısı</label>
+                            <input type="number" class="form-control" id="passenger_count" name="passenger_count" 
+                                   min="1" max="9" value="1" required>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="max_price" class="form-label">Maksimum Fiyat (TL)</label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="max_price" name="max_price" 
+                                       placeholder="Opsiyonel" min="0" step="0.01">
+                                <span class="input-group-text">TL</span>
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-4 mb-3">
+                            <label for="airline_preference" class="form-label">Tercih Edilen Havayolu</label>
+                            <input type="text" class="form-control" id="airline_preference" name="airline_preference" 
+                                   placeholder="Opsiyonel">
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3 form-check">
+                        <input type="checkbox" class="form-check-input" id="notification_enabled" name="notification_enabled" checked>
+                        <label class="form-check-label" for="notification_enabled">Fiyat Düşüş Bildirimi</label>
+                        <div class="form-text">Fiyat düştüğünde e-posta ile bildirim alın</div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg">
+                            <i class="fas fa-search"></i> Uçuş Ara
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Common Airports Info -->
+        <div class="card mt-4">
+            <div class="card-header">
+                <h6><i class="fas fa-info-circle"></i> Yaygın Havalimanı Kodları</h6>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><strong>IST</strong> - İstanbul Havalimanı</li>
+                            <li><strong>SAW</strong> - Sabiha Gökçen Havalimanı</li>
+                            <li><strong>ESB</strong> - Esenboğa Havalimanı (Ankara)</li>
+                            <li><strong>ADB</strong> - Adnan Menderes Havalimanı (İzmir)</li>
+                            <li><strong>AYT</strong> - Antalya Havalimanı</li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6">
+                        <ul class="list-unstyled">
+                            <li><strong>TZX</strong> - Trabzon Havalimanı</li>
+                            <li><strong>BJV</strong> - Bodrum-Milas Havalimanı</li>
+                            <li><strong>GZT</strong> - Gaziantep Havalimanı</li>
+                            <li><strong>KYA</strong> - Konya Havalimanı</li>
+                            <li><strong>VAN</strong> - Van Ferit Melen Havalimanı</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Initialize tooltips
+var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+    return new bootstrap.Tooltip(tooltipTriggerEl)
+});
+
+// Auto-uppercase airport codes
+document.querySelectorAll('.airport-input').forEach(function(input) {
+    input.addEventListener('input', function() {
+        this.value = this.value.toUpperCase();
+    });
+});
+</script>
+{% endblock %}
